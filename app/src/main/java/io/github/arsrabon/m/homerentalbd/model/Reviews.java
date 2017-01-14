@@ -8,16 +8,18 @@ public class Reviews {
     private int id;
     private int rents_id;
     private String user_id;
+    private String username;
     private int rating;
     private String review;
 
     public Reviews() {
     }
 
-    public Reviews(int id, int rents_id, String user_id, int rating, String review) {
+    public Reviews(int id, int rents_id, String user_id, String username, int rating, String review) {
         this.id = id;
         this.rents_id = rents_id;
         this.user_id = user_id;
+        this.username = username;
         this.rating = rating;
         this.review = review;
     }
@@ -44,6 +46,14 @@ public class Reviews {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getRating() {

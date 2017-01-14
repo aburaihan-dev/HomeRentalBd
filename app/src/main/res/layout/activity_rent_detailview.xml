@@ -205,17 +205,16 @@
 
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/btn_showreviews"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Show Reviews" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/viewReviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <Button
+            android:id="@+id/btn_showreviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show Reviews" />
     </LinearLayout>
 
 

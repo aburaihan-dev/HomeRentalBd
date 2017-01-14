@@ -13,7 +13,7 @@ public class ReviewsResponse {
     @SerializedName("error")
     private boolean error;
 
-    @SerializedName("reviews")
+    @SerializedName("review")
     private List<Reviews> reviewsList = new ArrayList<>();
 
     public ReviewsResponse() {

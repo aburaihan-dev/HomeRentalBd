@@ -5,6 +5,7 @@ import io.github.arsrabon.m.homerentalbd.model.Rent;
 import io.github.arsrabon.m.homerentalbd.model.RentResponse;
 import io.github.arsrabon.m.homerentalbd.model.RentTypeResponse;
 import io.github.arsrabon.m.homerentalbd.model.RentalAdResponse;
+import io.github.arsrabon.m.homerentalbd.model.ReviewsResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -32,5 +33,8 @@ public interface ApiInterface {
 
     @GET("rents/{id}")
     Call<RentResponse> getSingleRentalAd(@Path("id") int id);
+
+    @GET("reviews/{id}")
+    Call<ReviewsResponse> getReviews(@Path("id") int rent_id);
 
 }

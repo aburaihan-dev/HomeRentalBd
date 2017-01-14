@@ -6,11 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -32,8 +35,12 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.util.List;
 
 import io.github.arsrabon.m.homerentalbd.R;
+import io.github.arsrabon.m.homerentalbd.adapters.RentalAdsAdapter;
+import io.github.arsrabon.m.homerentalbd.adapters.ReviewsAdapter;
 import io.github.arsrabon.m.homerentalbd.model.Rent;
 import io.github.arsrabon.m.homerentalbd.model.RentResponse;
+import io.github.arsrabon.m.homerentalbd.model.Reviews;
+import io.github.arsrabon.m.homerentalbd.model.ReviewsResponse;
 import io.github.arsrabon.m.homerentalbd.rest.ApiClient;
 import io.github.arsrabon.m.homerentalbd.rest.ApiInterface;
 import retrofit2.Call;
@@ -65,6 +72,9 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
     ImageView img_two;
     ImageView img_three;
 
+    RecyclerView recyclerView_reviews;
+    Button btn_showReviews;
+
     boolean isImageFitToScreen;
     ImageButton btn_addtoWishList;
 
@@ -89,7 +99,7 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
         intent = getIntent();
         // initialize ApiInterface for use
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        int position = intent.getIntExtra("rent_id", 0);
+        final int position = intent.getIntExtra("rent_id", 0);
         final String treviews = intent.getStringExtra("rent_rev");
         final double rating = intent.getDoubleExtra("rent_ratings",0);
         Call<RentResponse> rentCall = apiService.getSingleRentalAd(position);
@@ -114,6 +124,9 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
         available = (TextView) findViewById(R.id.txt_available);
         posted_at = (TextView) findViewById(R.id.txt_posted_at);
         ratings = (RatingBar) findViewById(R.id.rents_ratings);
+
+        recyclerView_reviews = (RecyclerView) findViewById(R.id.viewReviews);
+        btn_showReviews = (Button) findViewById(R.id.btn_showreviews);
 
         img_one = (ImageView) findViewById(R.id.img_one);
         img_two = (ImageView) findViewById(R.id.img_two);
@@ -168,12 +181,49 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
             }
         });
 
+        btn_showReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ReviewsResponse> reviewsResponseCall = apiService.getReviews(position);
+                reviewsResponseCall.enqueue(new Callback<ReviewsResponse>() {
+                    @Override
+                    public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
+                        if (response.isSuccessful()){
+                            List<Reviews> reviewsList = response.body().getReviewsList();
+                            Log.d("revsize", String.valueOf(reviewsList.size()));
+                            setReviewsView(reviewsList);
+                        }else{
+                            Log.d("sjd", "onResponse: ");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ReviewsResponse> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
         btn_addtoWishList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(RentDetailView.this, "added", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void setReviewsView(List<Reviews> reviewsList) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView_reviews.setLayoutManager(linearLayoutManager);
+
+        try {
+            ReviewsAdapter reviewsAdapter = new ReviewsAdapter(reviewsList);
+            recyclerView_reviews.setAdapter(reviewsAdapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadPhoto(ImageView imageView) {

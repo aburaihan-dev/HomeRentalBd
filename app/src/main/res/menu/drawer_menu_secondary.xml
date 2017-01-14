@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/ic_action_home"
+        android:title="Home"/>
+    <item
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/ic_action_profile_2"
+        android:title="Profile"/>
+    <item
+        android:id="@+id/menu_viewInbox"
+        android:icon="@drawable/ic_action_inbox"
+        android:title="Inbox" />
+    <item
+        android:id="@+id/menu_wishlist"
+        android:icon="@drawable/ic_action_wishlist"
+        android:title="Wishlist"/>
+    <item
+        android:id="@+id/menu_add_rental"
+        android:icon="@drawable/ic_action_createnew"
+        android:title="Create Ad" />
+    <item
+        android:id="@+id/menu_add_request"
+        android:icon="@drawable/ic_action_createnew"
+        android:title="Request Rent" />
+    <item
+        android:id="@+id/menu_view_myads"
+        android:icon="@drawable/ic_action_advertisement"
+        android:title="My Advertisements" />
+    <item
+        android:id="@+id/menu_view_my_request"
+        android:icon="@drawable/ic_action_requests"
+        android:title="My Requests" />
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_action_logout"
+        android:title="Log Out"/>
+
+
+</menu>

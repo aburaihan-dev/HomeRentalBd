@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_sign_up"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2196F3"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    tools:context=".activities.SignUp_Activity">
+
+    <ImageView
+        android:id="@+id/app_banner"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/banner_image" />
+
+    <EditText
+        android:id="@+id/edit_newUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_banner"
+        android:layout_marginTop="5dp"
+        android:background="#FFF"
+        android:hint="Username"
+        android:textSize="23sp" />
+
+    <EditText
+        android:id="@+id/edit_newUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_newUsername"
+        android:layout_marginTop="5dp"
+        android:background="#FFF"
+        android:hint="Email"
+        android:inputType="textWebEmailAddress"
+        android:textSize="23sp" />
+
+    <EditText
+        android:id="@+id/edit_newUserPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_newUserEmail"
+        android:layout_marginTop="5dp"
+        android:background="#FFF"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textSize="23sp" />
+
+    <EditText
+        android:id="@+id/edit_newUserconfPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_newUserPassword"
+        android:layout_marginTop="5dp"
+        android:background="#FFF"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:textSize="23sp" />
+
+    <Button
+        android:id="@+id/btn_signUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_newUserconfPassword"
+        android:layout_marginTop="10dp"
+        android:background="#4FC3F7"
+        android:text="Sign Up" />
+
+    <Button
+        android:id="@+id/btn_goback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Skip"
+        android:background="#4FC3F7" />
+
+    <!--
+    <LinearLayout
+        android:layout_below="@+id/btn_signUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn_googleid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <Button
+            android:id="@+id/btn_facebookid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+    -->
+
+
+</RelativeLayout>

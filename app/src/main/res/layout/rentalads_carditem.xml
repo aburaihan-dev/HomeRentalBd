@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/rentals_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgview_big"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ft_3" />
+
+            <TextView
+                android:id="@+id/txt_banner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/imgview_big"
+                android:text="Flat For rent"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:id="@+id/layout_areatype_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_banner"
+                android:layout_toRightOf="@+id/imgview_big">
+
+                <TextView
+                    android:id="@+id/txt_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mohammadpur" />
+
+                <TextView
+                    android:id="@+id/txt_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/txt_area"
+                    android:text="Apartment" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_rooms_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_areatype_holder"
+                android:layout_toRightOf="@+id/imgview_big">
+
+                <TextView
+                    android:id="@+id/txt_aptsize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Size: 1300 SQFT" />
+
+                <TextView
+                    android:id="@+id/txt_bedrooms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/txt_aptsize"
+                    android:text="Bed Room: 4" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_ratings_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_rooms_holder"
+                android:layout_toRightOf="@+id/imgview_big">
+
+                <TextView
+                    android:id="@+id/txt_views"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Reviews: 125" />
+
+                <RatingBar
+                    android:id="@+id/rents_ratings"
+                    style="@style/RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/txt_views"
+                    android:isIndicator="true"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3.5"
+                    android:stepSize="0.01" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/txt_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_ratings_holder"
+                android:layout_toRightOf="@id/imgview_big"
+                android:text="Cost/mo: BDT 36500" />
+
+            <TextView
+                android:id="@+id/txt_avail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_price"
+                android:layout_toRightOf="@id/imgview_big"
+                android:text="Available: 01 Jun 2017" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

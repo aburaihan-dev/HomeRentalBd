@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_user_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.EditUserProfile"
+    tools:background="@color/md_blue_200">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#2196F3"
+        android:elevation="0dp"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:textDirection="rtl"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <LinearLayout
+        android:id="@+id/fullNameholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_toolbar">
+
+        <TextView
+            android:id="@+id/lbl_userFullName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Name: "
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_userFullName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Your FullName"
+            android:background="@color/cardview_light_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userNameholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fullNameholder">
+
+        <TextView
+            android:id="@+id/lbl_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username: "
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_userName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Your Username"
+            android:background="@color/cardview_light_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/emailHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/userNameholder">
+
+        <TextView
+            android:id="@+id/lbl_userEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email: "
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_userEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="yourname@email.com"
+            android:background="@color/cardview_light_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mobileNoHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailHolder">
+
+        <TextView
+            android:id="@+id/lbl_userMobileNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mobile Number: "
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_userMobileNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="+88 XXXXXXXXXXX"
+            android:background="@color/cardview_light_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/PhoneNoHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mobileNoHolder">
+
+        <TextView
+            android:id="@+id/lbl_userPhoneNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone Number: "
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_userPhoneNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Telephone Number"
+            android:background="@color/cardview_light_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cityHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/PhoneNoHolder">
+
+        <TextView
+            android:id="@+id/lbl_userCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City: "
+            android:textSize="20dp" />
+
+        <Spinner
+            android:id="@+id/spin_city"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/cardview_light_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/areaHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cityHolder">
+
+        <TextView
+            android:id="@+id/lbl_userArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Area: "
+            android:textSize="20dp" />
+
+        <Spinner
+            android:id="@+id/spin_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/cardview_light_background" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/addressholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/areaHolder">
+
+        <TextView
+            android:id="@+id/lbl_userFullAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_userFullAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Your Address"
+            android:background="@color/cardview_light_background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_EditProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btn_SaveProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/btn_SkipToHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Skip"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+
+</RelativeLayout>

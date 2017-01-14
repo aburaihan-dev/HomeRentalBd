@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "368332731213",
+    "firebase_url": "https://homerental-d2009.firebaseio.com",
+    "project_id": "homerental-d2009",
+    "storage_bucket": "homerental-d2009.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368332731213:android:bc13eb6c4b7e9d7b",
+        "android_client_info": {
+          "package_name": "io.github.arsrabon.m.homerentalbd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368332731213-tjbif9v608qvpbmg8fbh00d04ihq4e9t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-JamTt5-1KVpYY5P6Kp0hIcQ0lYnPhYU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

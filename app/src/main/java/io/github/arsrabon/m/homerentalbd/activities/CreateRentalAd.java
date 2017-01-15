@@ -1,15 +1,16 @@
 package io.github.arsrabon.m.homerentalbd.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import com.google.firebase.storage.FirebaseStorage;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -18,10 +19,14 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import java.util.Calendar;
+import java.util.zip.Inflater;
 
 import io.github.arsrabon.m.homerentalbd.R;
 
-public class CreateRentalAd extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
+public class CreateRentalAd extends AppCompatActivity implements Drawer.OnDrawerItemClickListener, DatePickerDialog.OnDateSetListener {
 
     FirebaseUser firebaseUser;
     FirebaseStorage firebaseStorage;
@@ -30,7 +35,11 @@ public class CreateRentalAd extends AppCompatActivity implements Drawer.OnDrawer
     AccountHeader headerResult;
     Drawer result;
 
+    Button datePickerButton;
+
     boolean flag;
+    private TextView dateTextView;
+    private Inflater inflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +47,28 @@ public class CreateRentalAd extends AppCompatActivity implements Drawer.OnDrawer
         setContentView(R.layout.activity_createrentalad);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 
         setMyToolbar(); // Toolbar Setter
         navDrawerMaker(); // NavDrawer Maker
 
+        datePickerButton = (Button) findViewById(R.id.myDatePicker);
+        dateTextView = (TextView) findViewById(R.id.show_pickedDate);
+
+        datePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        CreateRentalAd.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.setVersion(DatePickerDialog.Version.VERSION_2);
+                dpd.show(getFragmentManager(), "Datepickerdialog");
+            }
+        });
 
     }
 
@@ -111,12 +135,23 @@ public class CreateRentalAd extends AppCompatActivity implements Drawer.OnDrawer
         Intent intent;
         switch ((int) drawerItem.getIdentifier()) {
             case R.id.menu_home:
-                intent = new Intent(CreateRentalAd.this, DefaultActivity.class);
-               if(!flag){
-                   startActivity(intent);
-                   finish();
-               }
+                intent = new Intent(getBaseContext(), DefaultActivity.class);
+                startActivity(intent);
+                finish();
+
         }
         return false;
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String month = null;
+        if ((monthOfYear + 1) < 10) {
+            month = "0" + (monthOfYear + 1);
+        } else {
+            month = String.valueOf((monthOfYear + 1));
+        }
+        String date = year + "-" + month + "-" + dayOfMonth;
+        dateTextView.setText(date);
     }
 }

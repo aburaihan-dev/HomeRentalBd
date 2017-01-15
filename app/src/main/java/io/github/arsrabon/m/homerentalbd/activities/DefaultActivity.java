@@ -1,6 +1,5 @@
 package io.github.arsrabon.m.homerentalbd.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +11,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -39,7 +35,9 @@ import io.github.arsrabon.m.homerentalbd.model.RentalAd;
 import io.github.arsrabon.m.homerentalbd.model.RentalAdResponse;
 import io.github.arsrabon.m.homerentalbd.rest.ApiClient;
 import io.github.arsrabon.m.homerentalbd.rest.ApiInterface;
-import retrofit2.*;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
@@ -253,11 +251,16 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
                 startActivity(xintent);
                 finish();
                 break;
-            case R.id.menu_logout: firebaseAuth.signOut();
+            case R.id.menu_logout:
+                firebaseAuth.signOut();
                 xintent = new Intent(DefaultActivity.this, DefaultActivity.class);
                 startActivity(xintent);
                 finish();
                 break;
+            case R.id.menu_add_rental:
+                xintent = new Intent(getBaseContext(), CreateRentalAd.class);
+                startActivity(xintent);
+                finish();
         }
         return false;
     }

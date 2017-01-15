@@ -26,6 +26,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import io.github.arsrabon.m.homerentalbd.R;
+import io.github.arsrabon.m.homerentalbd.model.PostResponse;
 import io.github.arsrabon.m.homerentalbd.model.User;
 import io.github.arsrabon.m.homerentalbd.model.UserResponse;
 import io.github.arsrabon.m.homerentalbd.rest.ApiClient;
@@ -54,8 +55,7 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
     EditText edit_userMobileNo;
     EditText edit_userAddress;
 
-    Spinner area_spinner;
-    Spinner city_spinner;
+    private User user;
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private ApiInterface apiService;
@@ -89,7 +89,7 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 UserResponse userResponse = response.body();
-                User user = userResponse.getUser();
+                user = userResponse.getUser();
                 edit_userName.setText(user.getUsername());
                 edit_userFullname.setText(user.getFullname());
                 edit_userEmail.setText(user.getEmail());
@@ -118,8 +118,11 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
         btn_Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                String username = edit_userName.getText().toString();
+                String fullname = edit_userFullname.getText().toString();
+                String mobile_no = edit_userMobileNo.getText().toString();
+                String address = edit_userAddress.getText().toString();
+                updateUserData(user.getUser_id(),username,fullname,user.getEmail(),mobile_no,address);
                 btn_Edit.setVisibility(View.VISIBLE);
                 btn_Save.setVisibility(View.GONE);
                 btn_Skip.setVisibility(View.GONE);
@@ -129,17 +132,40 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
         btn_Skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EditUserProfile.this, DefaultActivity.class);
+                Intent intent = new Intent(getBaseContext(), DefaultActivity.class);
                 if (flag) {
-//                    startActivity(intent);
+                    String username = edit_userName.getText().toString();
+                    String fullname = edit_userFullname.getText().toString();
+                    String mobile_no = edit_userMobileNo.getText().toString();
+                    String address = edit_userAddress.getText().toString();
+                    updateUserData(user.getUser_id(),username,fullname,user.getEmail(),mobile_no,address);
+                    startActivity(intent);
+                    finish();
                 } else {
-//                    startActivity(intent);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
 
     }
 
+    public void updateUserData(String user_id, String username, String fullname,String email ,String mobile_no, String address){
+        Call<PostResponse> postResponseCall = apiService.updateNewUser(user_id,username,fullname,email,mobile_no,address);
+        postResponseCall.enqueue(new Callback<PostResponse>() {
+            @Override
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getBaseContext(), "Your profile update is Successful", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostResponse> call, Throwable t) {
+
+            }
+        });
+    }
 
     public void setMyToolbar() {
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);

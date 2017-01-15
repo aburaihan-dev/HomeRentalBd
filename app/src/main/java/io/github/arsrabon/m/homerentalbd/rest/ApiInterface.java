@@ -1,13 +1,20 @@
 package io.github.arsrabon.m.homerentalbd.rest;
 
 import io.github.arsrabon.m.homerentalbd.model.AreaResponse;
+import io.github.arsrabon.m.homerentalbd.model.PostResponse;
 import io.github.arsrabon.m.homerentalbd.model.Rent;
 import io.github.arsrabon.m.homerentalbd.model.RentResponse;
 import io.github.arsrabon.m.homerentalbd.model.RentTypeResponse;
 import io.github.arsrabon.m.homerentalbd.model.RentalAdResponse;
+import io.github.arsrabon.m.homerentalbd.model.Reviews;
 import io.github.arsrabon.m.homerentalbd.model.ReviewsResponse;
+import io.github.arsrabon.m.homerentalbd.model.UserResponse;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -37,4 +44,22 @@ public interface ApiInterface {
     @GET("reviews/{id}")
     Call<ReviewsResponse> getReviews(@Path("id") int rent_id);
 
+    @FormUrlEncoded
+    @POST("reviews")
+    Call<PostResponse> postReviews(@Field("rents_id") int rents_id,
+                                   @Field("user_id") String user_id,
+                                   @Field("rating") int rating,
+                                   @Field("review") String review);
+
+    @FormUrlEncoded
+    @POST("user")
+    Call<PostResponse> createNewUser(@Field("user_id") String user_id,
+                                     @Field("Username") String Username,
+                                     @Field("fullName") String fullname,
+                                     @Field("email") String email,
+                                     @Field("mobile_no") String mobile_no,
+                                     @Field("address") String address);
+
+    @GET("user/user_id/{id}")
+    Call<UserResponse> getUserByUserId(@Path("user_id") String user_id);
 }

@@ -3,4 +3,5 @@
     <string name="MyPreference">homerentalbd</string>
     <string name="ok_button">Ok</string>
     <string name="firebaseStorageUrl">df</string>
+    <string name="post_button">POST</string>
 </resources>

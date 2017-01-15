@@ -17,6 +17,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import io.github.arsrabon.m.homerentalbd.R;
+import io.github.arsrabon.m.homerentalbd.model.PostResponse;
+import io.github.arsrabon.m.homerentalbd.rest.ApiClient;
+import io.github.arsrabon.m.homerentalbd.rest.ApiInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUp_Activity extends AppCompatActivity {
 
@@ -31,6 +37,8 @@ public class SignUp_Activity extends AppCompatActivity {
 
     Button btn_SignUp;
     Button btn_skip;
+    private ApiInterface apiService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,9 @@ public class SignUp_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        // initialize ApiInterface for use
+        apiService = ApiClient.getClient().create(ApiInterface.class);
 
         edit_Username = (EditText) findViewById(R.id.edit_newUsername);
         edit_Email = (EditText) findViewById(R.id.edit_newUserEmail);
@@ -66,8 +77,11 @@ public class SignUp_Activity extends AppCompatActivity {
                                 Toast.makeText(SignUp_Activity.this, "Authentication failed." + task.getException(),
                                         Toast.LENGTH_SHORT).show();
                             }else {
-                                Intent intent = new Intent(SignUp_Activity.this,EditUserProfile.class);
                                 firebaseUser = firebaseAuth.getCurrentUser();
+//                                Log.d("firebaseUser", "Email:" +firebaseUser.getEmail()+" UID:" +
+//                                        firebaseUser.getUid() +" displayName:"+ firebaseUser.getDisplayName());
+                                addNewUserToDatabase(firebaseUser.getEmail(),firebaseUser.getUid(),username);
+                                Intent intent = new Intent(SignUp_Activity.this,EditUserProfile.class);
                                 startActivity(intent);
                                 finish();
                             }
@@ -77,5 +91,23 @@ public class SignUp_Activity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void addNewUserToDatabase(String email, String uid, String username) {
+        Call<PostResponse> postResponseCall = apiService.createNewUser(uid,username,email,"","","");
+        postResponseCall.enqueue(new Callback<PostResponse>() {
+            @Override
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                PostResponse postResponse = response.body();
+                if(postResponse.isError()){
+                    Toast.makeText(SignUp_Activity.this, "Sorry SignUp failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostResponse> call, Throwable t) {
+
+            }
+        });
     }
 }

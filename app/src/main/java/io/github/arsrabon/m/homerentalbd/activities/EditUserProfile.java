@@ -14,15 +14,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import io.github.arsrabon.m.homerentalbd.R;
+import io.github.arsrabon.m.homerentalbd.model.User;
+import io.github.arsrabon.m.homerentalbd.model.UserResponse;
+import io.github.arsrabon.m.homerentalbd.rest.ApiClient;
+import io.github.arsrabon.m.homerentalbd.rest.ApiInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
@@ -30,8 +40,7 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
     private Drawer result;
     private AccountHeader headerResult;
     private Toolbar myToolbar;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+
 
     private boolean flag = false;
 
@@ -43,10 +52,13 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
     EditText edit_userName;
     EditText edit_userEmail;
     EditText edit_userMobileNo;
-    EditText edit_userTelephone;
+    EditText edit_userAddress;
 
     Spinner area_spinner;
     Spinner city_spinner;
+    private FirebaseUser firebaseUser;
+    private FirebaseAuth firebaseAuth;
+    private ApiInterface apiService;
 
 
     @Override
@@ -54,9 +66,11 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_userprofile);
 
-        Intent intent = getIntent();
-        String uID = intent.getStringExtra("UserId");
-        setSharedPreferences(); // creates Sharedpref. and editor instances
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+
         setMyToolbar(); // Toolbar Setter
         navDrawerMaker(); // NavDrawer Maker
 
@@ -64,16 +78,29 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
         edit_userName = (EditText) findViewById(R.id.edit_userFullName);
         edit_userEmail = (EditText) findViewById(R.id.edit_userEmail);
         edit_userMobileNo = (EditText) findViewById(R.id.edit_userMobileNo);
-        edit_userTelephone = (EditText) findViewById(R.id.edit_userPhoneNo);
-
-        area_spinner = (Spinner) findViewById(R.id.spin_area);
-        city_spinner = (Spinner) findViewById(R.id.spin_city);
+        edit_userAddress = (EditText) findViewById(R.id.edit_userAddress);
 
         btn_Edit = (Button) findViewById(R.id.btn_EditProfile);
         btn_Save = (Button) findViewById(R.id.btn_SaveProfile);
         btn_Skip = (Button) findViewById(R.id.btn_SkipToHome);
 
+        Call<UserResponse> userResponseCall = apiService.getUserByUserId(firebaseUser.getUid());
+        userResponseCall.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                UserResponse userResponse = response.body();
+                User user = userResponse.getUser();
+                edit_userName.setText(user.getUsername());
+                edit_userFullname.setText(user.getFullname());
+                edit_userEmail.setText(user.getEmail());
+                edit_userMobileNo.setText(user.getMobile_no());
+            }
 
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+
+            }
+        });
 
         btn_Save.setVisibility(View.GONE);
         btn_Skip.setVisibility(View.GONE);
@@ -113,12 +140,6 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
 
     }
 
-    public void setSharedPreferences() {
-        sharedPreferences = getSharedPreferences(String.valueOf(R.string.MyPreference), MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putBoolean("loggedin", false);
-        editor.commit();
-    }
 
     public void setMyToolbar() {
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -127,23 +148,22 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
     }
 
     public void navDrawerMaker() {
-        headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.header)
-                .addProfiles(new ProfileDrawerItem().withName("Sign In / Sign Up")
-                        .withEmail("AndroidStudio@gmail.com")
-                        .withIcon(getResources().getDrawable(R.drawable.profile2)))
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-                        return false;
-                    }
-                })
-                .build();
 
-        Log.d("CheckPref", String.valueOf(sharedPreferences.getBoolean("loggedin", false)));
-
-        if (sharedPreferences.getBoolean("loggedin", false)) {
+        if (firebaseUser != null) {
+            headerResult = new AccountHeaderBuilder()
+                    .withActivity(this)
+                    .withHeaderBackground(R.drawable.header)
+                    .addProfiles(new ProfileDrawerItem().withName(firebaseUser.getDisplayName())
+                            .withEmail(firebaseUser.getEmail())
+                            .withIcon(getResources().getDrawable(R.drawable.profile2)))
+                    .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                        @Override
+                        public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                            Toast.makeText(getBaseContext(), "hello", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    })
+                    .build();
             result = new DrawerBuilder()
                     .withActivity(this)
                     .withToolbar(myToolbar)
@@ -151,6 +171,20 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
                     .inflateMenu(R.menu.drawer_menu_secondary)
                     .build();
         } else {
+            headerResult = new AccountHeaderBuilder()
+                    .withActivity(this)
+                    .withHeaderBackground(R.drawable.header)
+                    .addProfiles(new ProfileDrawerItem().withName("Sign In / Sign Up")
+                            .withEmail("AndroidStudio@gmail.com")
+                            .withIcon(getResources().getDrawable(R.drawable.profile2)))
+                    .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                        @Override
+                        public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                            Toast.makeText(getBaseContext(), "hello", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    })
+                    .build();
             result = new DrawerBuilder()
                     .withActivity(this)
                     .withToolbar(myToolbar)

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -32,17 +33,20 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.io.IOException;
 import java.util.List;
 
 import io.github.arsrabon.m.homerentalbd.R;
 import io.github.arsrabon.m.homerentalbd.adapters.RentalAdsAdapter;
 import io.github.arsrabon.m.homerentalbd.adapters.ReviewsAdapter;
+import io.github.arsrabon.m.homerentalbd.model.PostResponse;
 import io.github.arsrabon.m.homerentalbd.model.Rent;
 import io.github.arsrabon.m.homerentalbd.model.RentResponse;
 import io.github.arsrabon.m.homerentalbd.model.Reviews;
 import io.github.arsrabon.m.homerentalbd.model.ReviewsResponse;
 import io.github.arsrabon.m.homerentalbd.rest.ApiClient;
 import io.github.arsrabon.m.homerentalbd.rest.ApiInterface;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,6 +78,7 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
 
     RecyclerView recyclerView_reviews;
     Button btn_showReviews;
+    Button btn_postReview;
 
     boolean isImageFitToScreen;
     ImageButton btn_addtoWishList;
@@ -85,6 +90,9 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
     private ApiInterface apiService;
 
     Intent intent;
+    private boolean showFlag = true;
+
+    Rent rent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +109,12 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
         apiService = ApiClient.getClient().create(ApiInterface.class);
         final int position = intent.getIntExtra("rent_id", 0);
         final String treviews = intent.getStringExtra("rent_rev");
-        final double rating = intent.getDoubleExtra("rent_ratings",0);
+        final double rating = intent.getDoubleExtra("rent_ratings", 0);
         Call<RentResponse> rentCall = apiService.getSingleRentalAd(position);
 
-        Log.d("rent_id", String.valueOf(position));
-        Log.d("rent_id", String.valueOf(treviews));
-        Log.d("rent_id", String.valueOf(rating));
+//        Log.d("rent_id", String.valueOf(position));
+//        Log.d("rent_id", String.valueOf(treviews));
+//        Log.d("rent_id", String.valueOf(rating));
 
         setMyToolbar(); // Toolbar Setter
         navDrawerMaker(); // NavDrawer Maker
@@ -127,6 +135,7 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
 
         recyclerView_reviews = (RecyclerView) findViewById(R.id.viewReviews);
         btn_showReviews = (Button) findViewById(R.id.btn_showreviews);
+        btn_postReview = (Button) findViewById(R.id.btn_postreviews);
 
         img_one = (ImageView) findViewById(R.id.img_one);
         img_two = (ImageView) findViewById(R.id.img_two);
@@ -138,7 +147,8 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
             @Override
             public void onResponse(Call<RentResponse> call, Response<RentResponse> response) {
                 List<Rent> rents = response.body().getRents();
-                Rent rent = rents.get(0);
+
+                rent = rents.get(0);
                 banner.setText(rent.getBanner());
                 beds.setText("Bed Room's: " + String.valueOf(rent.getBeds()));
                 baths.setText("Bed Room's: " + String.valueOf(rent.getBaths()));
@@ -146,7 +156,7 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
                 floordetails.setText("Details: " + rent.getFloordetails());
                 lift_parking.setText("lift: " + rent.isLift() + " Parking: " + rent.isParking());
                 address.setText("Address: " + rent.getAddress());
-                rentprice.setText("Rent: " + String.valueOf(rent.getRentprice())+"BDT/Month");
+                rentprice.setText("Rent: " + String.valueOf(rent.getRentprice()) + "BDT/Month");
                 rentdetails.setText("Others: " + rent.getRentdetails());
                 available.setText("Available From: " + rent.getAvailable());
                 posted_at.setText("Ad Posted @" + rent.getCreated_at());
@@ -184,24 +194,14 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
         btn_showReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call<ReviewsResponse> reviewsResponseCall = apiService.getReviews(position);
-                reviewsResponseCall.enqueue(new Callback<ReviewsResponse>() {
-                    @Override
-                    public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
-                        if (response.isSuccessful()){
-                            List<Reviews> reviewsList = response.body().getReviewsList();
-                            Log.d("revsize", String.valueOf(reviewsList.size()));
-                            setReviewsView(reviewsList);
-                        }else{
-                            Log.d("sjd", "onResponse: ");
-                        }
-                    }
+                showReviews(position);
+            }
+        });
 
-                    @Override
-                    public void onFailure(Call<ReviewsResponse> call, Throwable t) {
-
-                    }
-                });
+        btn_postReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postReview();
             }
         });
 
@@ -211,6 +211,36 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
                 Toast.makeText(RentDetailView.this, "added", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showReviews(int position) {
+        if (showFlag) {
+            recyclerView_reviews.setVisibility(View.VISIBLE);
+            Call<ReviewsResponse> reviewsResponseCall = apiService.getReviews(position);
+            reviewsResponseCall.enqueue(new Callback<ReviewsResponse>() {
+                @Override
+                public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
+                    if (response.isSuccessful()) {
+                        List<Reviews> reviewsList = response.body().getReviewsList();
+                        Log.d("revsize", String.valueOf(reviewsList.size()));
+                        setReviewsView(reviewsList);
+                    } else {
+                        Log.d("sjd", "onResponse: ");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ReviewsResponse> call, Throwable t) {
+
+                }
+            });
+            showFlag = false;
+            btn_showReviews.setText("Hide Reviews");
+        } else {
+            recyclerView_reviews.setVisibility(View.GONE);
+            btn_showReviews.setText("Show Reviews");
+            showFlag = true;
+        }
     }
 
     public void setReviewsView(List<Reviews> reviewsList) {
@@ -248,6 +278,49 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
         });
         imageDialog.create();
         imageDialog.show();
+    }
+
+    private void postReview() {
+        AlertDialog.Builder postReviewDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View layout = inflater.inflate(R.layout.postreview_dialog,
+                (ViewGroup) findViewById(R.id.post_reviewHolder));
+        final EditText edt_review = (EditText) layout.findViewById(R.id.edt_review);
+        final RatingBar postrent_rating = (RatingBar) layout.findViewById(R.id.postrent_rating);
+        postrent_rating.setIsIndicator(false);
+        postReviewDialog.setView(layout);
+        postReviewDialog.setPositiveButton(getString(R.string.post_button), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+
+                String rev = edt_review.getText().toString();
+                int rating = (int) postrent_rating.getRating();
+                if (rating > 0 && rev.length() > 10) {
+                    Call<PostResponse> postResponseCall = apiService.postReviews(rent.getId(), rent.getUser_id(), rating, rev);
+                    postResponseCall.enqueue(new Callback<PostResponse>() {
+                        @Override
+                        public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                            PostResponse postResponse = response.body();
+                            Log.d("onResponse: ",postResponse.getMessage());
+                            showFlag=true;
+                            showReviews(rent.getId());
+                        }
+
+                        @Override
+                        public void onFailure(Call<PostResponse> call, Throwable t) {
+
+                        }
+                    });
+                } else {
+                    Toast.makeText(RentDetailView.this, "Please give rating And Write a review for this Ad", Toast.LENGTH_SHORT).show();
+                }
+                dialog.dismiss();
+            }
+
+        });
+        postReviewDialog.create();
+        postReviewDialog.show();
     }
 
     public void setMyToolbar() {
@@ -310,7 +383,18 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
         Intent xIntent;
+        switch ((int) drawerItem.getIdentifier()){
+            case R.id.menu_home : xIntent = new Intent(getBaseContext(),DefaultActivity.class);
+                startActivity(xIntent);
+                finish();
+        }
         return false;
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getBaseContext(),DefaultActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

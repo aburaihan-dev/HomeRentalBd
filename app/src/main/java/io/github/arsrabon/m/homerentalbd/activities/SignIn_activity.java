@@ -62,7 +62,7 @@ public class SignIn_activity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 firebaseUser = firebaseAuth.getCurrentUser();
-                                Toast.makeText(SignIn_activity.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignIn_activity.this,"SignIn Successful",Toast.LENGTH_SHORT).show();
                                 Log.d("TAG", "success");
                                 Intent intent = new Intent(SignIn_activity.this,DefaultActivity.class);
                                 startActivity(intent);
@@ -76,4 +76,6 @@ public class SignIn_activity extends AppCompatActivity {
             }
         });
     }
+
+
 }

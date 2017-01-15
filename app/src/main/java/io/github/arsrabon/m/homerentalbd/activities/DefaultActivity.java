@@ -56,7 +56,6 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
     List<Area> areas;
     List<RentalAd> rentalAds;
 
-    TextView showall;
     Spinner rentType;
     Spinner areaList;
     RecyclerView rentalsRecyclerView;
@@ -114,12 +113,12 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
         rentalAdResponseCall.enqueue(new Callback<RentalAdResponse>() {
             @Override
             public void onResponse(Call<RentalAdResponse> call, Response<RentalAdResponse> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     rentalAds = response.body().getRentalAds();
                     Log.d("rents", String.valueOf(rentalAds.size()));
                     setRentalAdsView();
-                }else {
-                    Log.d("onResponse: ","crap");
+                } else {
+                    Log.d("onResponse: ", "crap");
                 }
             }
 
@@ -237,14 +236,28 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
-        Intent intent;
+        Intent xintent;
         switch ((int) drawerItem.getIdentifier()) {
             case R.id.menu_home:
-                intent = new Intent(DefaultActivity.this, DefaultActivity.class);
-                if (!flag) {
-                    startActivity(intent);
-                    finish();
-                }
+                xintent = new Intent(DefaultActivity.this, DefaultActivity.class);
+                startActivity(xintent);
+                finish();
+                break;
+            case R.id.menu_signin:
+                xintent = new Intent(getBaseContext(), SignIn_activity.class);
+                startActivity(xintent);
+                finish();
+                break;
+            case R.id.menu_profile:
+                xintent = new Intent(getBaseContext(), EditUserProfile.class);
+                startActivity(xintent);
+                finish();
+                break;
+            case R.id.menu_logout: firebaseAuth.signOut();
+                xintent = new Intent(DefaultActivity.this, DefaultActivity.class);
+                startActivity(xintent);
+                finish();
+                break;
         }
         return false;
     }

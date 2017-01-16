@@ -39,6 +39,9 @@ public class SignUp_Activity extends AppCompatActivity {
     Button btn_skip;
     private ApiInterface apiService;
 
+    String email;
+    String username;
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +64,15 @@ public class SignUp_Activity extends AppCompatActivity {
         btn_SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String username = edit_Username.getText().toString();
-                final String email = edit_Email.getText().toString();
-                final String password = edit_Password.getText().toString();
+                Toast.makeText(getBaseContext(), "Please wait a bit!", Toast.LENGTH_SHORT).show();
+                username = edit_Username.getText().toString();
+
+                email = edit_Email.getText().toString();
+
+                password = edit_Password.getText().toString();
                 String confPassword = edit_ConfPassword.getText().toString();
-                if (username.length() > 6 &&
-                        email.length() > 15 &&
+                if (username.length() > 0 &&
+                        email.length() > 10 &&
                         password.length() > 6 &&
                         confPassword.equals(password)) {
 
@@ -78,10 +84,10 @@ public class SignUp_Activity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                             }else {
                                 firebaseUser = firebaseAuth.getCurrentUser();
-//                                Log.d("firebaseUser", "Email:" +firebaseUser.getEmail()+" UID:" +
-//                                        firebaseUser.getUid() +" displayName:"+ firebaseUser.getDisplayName());
+                                Log.d("firebaseUser", "Email:" +firebaseUser.getEmail()+" UID:" +
+                                        firebaseUser.getUid() +" displayName:"+ firebaseUser.getDisplayName());
                                 addNewUserToDatabase(firebaseUser.getEmail(),firebaseUser.getUid(),username);
-                                Intent intent = new Intent(SignUp_Activity.this,EditUserProfile.class);
+                                Intent intent = new Intent(SignUp_Activity.this,DefaultActivity.class);
                                 startActivity(intent);
                                 finish();
                             }
@@ -94,14 +100,11 @@ public class SignUp_Activity extends AppCompatActivity {
     }
 
     private void addNewUserToDatabase(String email, String uid, String username) {
-        Call<PostResponse> postResponseCall = apiService.createNewUser(uid,username,email,"","","");
+        Call<PostResponse> postResponseCall = apiService.createNewUser(uid,username,email);
         postResponseCall.enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 PostResponse postResponse = response.body();
-                if(postResponse.isError()){
-                    Toast.makeText(SignUp_Activity.this, "Sorry SignUp failed", Toast.LENGTH_SHORT).show();
-                }
             }
 
             @Override

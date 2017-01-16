@@ -84,28 +84,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/mobileNoHolder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/emailHolder">
-
-        <TextView
-            android:id="@+id/lbl_userMobileNo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mobile Number: "
-            android:textSize="20dp" />
-
-        <EditText
-            android:id="@+id/edit_userMobileNo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="+88 XXXXXXXXXXX"
-            android:background="@color/cardview_light_background" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/addressholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -152,6 +130,30 @@
             android:layout_height="wrap_content"
             android:text="Skip"
             android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mobileNoHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailHolder"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/lbl_userMobileNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mobile Number: "
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_userMobileNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="+88 XXXXXXXXXXX"
+            android:background="@color/cardview_light_background" />
     </LinearLayout>
 
 

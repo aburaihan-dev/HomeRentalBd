@@ -56,13 +56,10 @@ public interface ApiInterface {
     @POST("user")
     Call<PostResponse> createNewUser(@Field("user_id") String user_id,
                                      @Field("Username") String Username,
-                                     @Field("fullName") String fullname,
-                                     @Field("email") String email,
-                                     @Field("mobile_no") String mobile_no,
-                                     @Field("address") String address);
+                                     @Field("email") String email);
 
     @GET("user/user_id/{id}")
-    Call<UserResponse> getUserByUserId(@Path("user_id") String user_id);
+    Call<UserResponse> getUserByUserId(@Path("id") String id);
 
     @FormUrlEncoded
     @PUT("user")

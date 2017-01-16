@@ -34,9 +34,11 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.arsrabon.m.homerentalbd.R;
+import io.github.arsrabon.m.homerentalbd.WishLists;
 import io.github.arsrabon.m.homerentalbd.adapters.RentalAdsAdapter;
 import io.github.arsrabon.m.homerentalbd.adapters.ReviewsAdapter;
 import io.github.arsrabon.m.homerentalbd.model.PostResponse;
@@ -44,6 +46,7 @@ import io.github.arsrabon.m.homerentalbd.model.Rent;
 import io.github.arsrabon.m.homerentalbd.model.RentResponse;
 import io.github.arsrabon.m.homerentalbd.model.Reviews;
 import io.github.arsrabon.m.homerentalbd.model.ReviewsResponse;
+import io.github.arsrabon.m.homerentalbd.model.WishList;
 import io.github.arsrabon.m.homerentalbd.rest.ApiClient;
 import io.github.arsrabon.m.homerentalbd.rest.ApiInterface;
 import okhttp3.ResponseBody;
@@ -201,7 +204,11 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
         btn_postReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postReview();
+                if(firebaseAuth.getCurrentUser() != null){
+                    postReview();
+                }else {
+                    Toast.makeText(getBaseContext(), "Please SignIn First to post a review.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -209,6 +216,12 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
             @Override
             public void onClick(View view) {
                 Toast.makeText(RentDetailView.this, "added", Toast.LENGTH_SHORT).show();
+                int i=1;
+                WishList wish = new WishList(i++,firebaseUser.getUid(),rent.getId());
+                WishLists wishLists = WishLists.getInstance();
+                List<WishList> wishListList = wishLists.getWishLists();
+                wishListList.add(wish);
+                wishLists.setWishLists(wishListList);
             }
         });
     }
@@ -297,7 +310,7 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
                 String rev = edt_review.getText().toString();
                 int rating = (int) postrent_rating.getRating();
                 if (rating > 0 && rev.length() > 10) {
-                    Call<PostResponse> postResponseCall = apiService.postReviews(rent.getId(), rent.getUser_id(), rating, rev);
+                    Call<PostResponse> postResponseCall = apiService.postReviews(rent.getId(), firebaseUser.getUid(), rating, rev);
                     postResponseCall.enqueue(new Callback<PostResponse>() {
                         @Override
                         public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {

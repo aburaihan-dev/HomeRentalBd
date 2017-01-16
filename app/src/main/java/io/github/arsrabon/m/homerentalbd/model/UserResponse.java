@@ -14,14 +14,14 @@ public class UserResponse {
     private boolean error;
 
     @SerializedName("user")
-    private User user;
+    private List<User> users = new ArrayList<>();
 
     public UserResponse() {
     }
 
-    public UserResponse(boolean error, User user) {
+    public UserResponse(boolean error, List<User> user) {
         this.error = error;
-        this.user = user;
+        this.users = user;
     }
 
     public boolean isError() {
@@ -32,11 +32,11 @@ public class UserResponse {
         this.error = error;
     }
 
-    public User getUser() {
-        return user;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

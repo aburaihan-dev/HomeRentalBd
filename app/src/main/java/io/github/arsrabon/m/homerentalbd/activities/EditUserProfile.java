@@ -25,6 +25,8 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.util.List;
+
 import io.github.arsrabon.m.homerentalbd.R;
 import io.github.arsrabon.m.homerentalbd.model.PostResponse;
 import io.github.arsrabon.m.homerentalbd.model.User;
@@ -75,7 +77,7 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
         navDrawerMaker(); // NavDrawer Maker
 
         edit_userFullname = (EditText) findViewById(R.id.edit_userFullName);
-        edit_userName = (EditText) findViewById(R.id.edit_userFullName);
+        edit_userName = (EditText) findViewById(R.id.edit_userName);
         edit_userEmail = (EditText) findViewById(R.id.edit_userEmail);
         edit_userMobileNo = (EditText) findViewById(R.id.edit_userMobileNo);
         edit_userAddress = (EditText) findViewById(R.id.edit_userAddress);
@@ -84,16 +86,23 @@ public class EditUserProfile extends AppCompatActivity implements Drawer.OnDrawe
         btn_Save = (Button) findViewById(R.id.btn_SaveProfile);
         btn_Skip = (Button) findViewById(R.id.btn_SkipToHome);
 
+        Log.d("onCreate: ",firebaseUser.getUid());
         Call<UserResponse> userResponseCall = apiService.getUserByUserId(firebaseUser.getUid());
+
         userResponseCall.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 UserResponse userResponse = response.body();
-                user = userResponse.getUser();
-                edit_userName.setText(user.getUsername());
-                edit_userFullname.setText(user.getFullname());
-                edit_userEmail.setText(user.getEmail());
-                edit_userMobileNo.setText(user.getMobile_no());
+                List<User> df = userResponse.getUsers();
+                if(df.size()>0){
+                    user = df.get(0);
+                    edit_userName.setText(user.getUsername());
+                    edit_userFullname.setText(user.getFullname());
+                    edit_userEmail.setText(user.getEmail());
+                    edit_userEmail.setEnabled(false);
+                    edit_userMobileNo.setText(user.getMobile_no());
+                    Log.d("onResponse: ",user.getEmail() + user.getUsername());
+                }
             }
 
             @Override

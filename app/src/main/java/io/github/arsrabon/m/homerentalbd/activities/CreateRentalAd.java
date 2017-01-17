@@ -190,6 +190,16 @@ public class CreateRentalAd extends AppCompatActivity implements Drawer.OnDrawer
             }
         });
 
+        btn_publish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(), "Your Rent is posted Successfully , Other users will see it in a short moment.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getBaseContext(),DefaultActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     public void postRentalAd(){

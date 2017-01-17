@@ -2,7 +2,6 @@ package io.github.arsrabon.m.homerentalbd.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,13 +32,10 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.github.arsrabon.m.homerentalbd.R;
 import io.github.arsrabon.m.homerentalbd.WishLists;
-import io.github.arsrabon.m.homerentalbd.adapters.RentalAdsAdapter;
 import io.github.arsrabon.m.homerentalbd.adapters.ReviewsAdapter;
 import io.github.arsrabon.m.homerentalbd.model.PostResponse;
 import io.github.arsrabon.m.homerentalbd.model.Rent;
@@ -49,7 +45,6 @@ import io.github.arsrabon.m.homerentalbd.model.ReviewsResponse;
 import io.github.arsrabon.m.homerentalbd.model.WishList;
 import io.github.arsrabon.m.homerentalbd.rest.ApiClient;
 import io.github.arsrabon.m.homerentalbd.rest.ApiInterface;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -204,9 +199,9 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
         btn_postReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(firebaseAuth.getCurrentUser() != null){
+                if (firebaseAuth.getCurrentUser() != null) {
                     postReview();
-                }else {
+                } else {
                     Toast.makeText(getBaseContext(), "Please SignIn First to post a review.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -216,12 +211,12 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
             @Override
             public void onClick(View view) {
                 Toast.makeText(RentDetailView.this, "added", Toast.LENGTH_SHORT).show();
-                int i=1;
-                WishList wish = new WishList(i++,firebaseUser.getUid(),rent.getId());
-                WishLists wishLists = WishLists.getInstance();
-                List<WishList> wishListList = wishLists.getWishLists();
-                wishListList.add(wish);
-                wishLists.setWishLists(wishListList);
+//                int i = 1;
+//                WishList wish = new WishList(i++, firebaseUser.getUid(), rent.getId());
+//                WishLists wishLists = WishLists.getInstance();
+//                List<WishList> wishListList = wishLists.getWishLists();
+//                wishListList.add(wish);
+//                wishLists.setWishLists(wishListList);
             }
         });
     }
@@ -309,14 +304,14 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
 
                 String rev = edt_review.getText().toString();
                 int rating = (int) postrent_rating.getRating();
-                if (rating > 0 && rev.length() > 10) {
+                if (rating > 0 && rev.length() > 1) {
                     Call<PostResponse> postResponseCall = apiService.postReviews(rent.getId(), firebaseUser.getUid(), rating, rev);
                     postResponseCall.enqueue(new Callback<PostResponse>() {
                         @Override
                         public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                             PostResponse postResponse = response.body();
-                            Log.d("onResponse: ",postResponse.getMessage());
-                            showFlag=true;
+                            Log.d("onResponse: ", postResponse.getMessage());
+                            showFlag = true;
                             showReviews(rent.getId());
                         }
 
@@ -396,17 +391,24 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
         Intent xIntent;
-        switch ((int) drawerItem.getIdentifier()){
-            case R.id.menu_home : xIntent = new Intent(getBaseContext(),DefaultActivity.class);
+        switch ((int) drawerItem.getIdentifier()) {
+            case R.id.menu_home:
+                xIntent = new Intent(getBaseContext(), DefaultActivity.class);
                 startActivity(xIntent);
                 finish();
+                break;
+            case R.id.menu_signin:
+                xIntent = new Intent(getBaseContext(), SignIn_activity.class);
+                startActivity(xIntent);
+                finish();
+                break;
         }
         return false;
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getBaseContext(),DefaultActivity.class);
+        Intent intent = new Intent(getBaseContext(), DefaultActivity.class);
         startActivity(intent);
         finish();
     }

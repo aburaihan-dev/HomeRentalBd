@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorPrimaryLight"
     tools:context="io.github.arsrabon.m.homerentalbd.activities.DefaultActivity">
 
     <android.support.v7.widget.Toolbar
@@ -30,16 +31,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/md_white_1000">
 
         <Spinner
             android:id="@+id/spin_type"
+            style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <Spinner
             android:id="@+id/spin_area"
+            style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />

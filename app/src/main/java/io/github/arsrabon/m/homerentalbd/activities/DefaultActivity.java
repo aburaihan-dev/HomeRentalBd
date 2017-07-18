@@ -81,66 +81,81 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         progressTrackerAnimate();
 
-        Call<RentTypeResponse> rentTypeResponseCall = apiService.getRentTypes();
-        rentTypeResponseCall.enqueue(new Callback<RentTypeResponse>() {
+        new Thread(new Runnable() {
             @Override
-            public void onResponse(Call<RentTypeResponse> call, Response<RentTypeResponse> response) {
-                if (response.isSuccessful()){
-                    rentTypes = response.body().getRentTypesList();
-                    setRentTypeSpinner();
-                    Log.d("rentType", String.valueOf(rentTypes.size()));
-                }else {
-                    Log.d("onResponse: ", "crap");
-                    Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
-                }
-            }
+            public void run() {
+                Call<RentTypeResponse> rentTypeResponseCall = apiService.getRentTypes();
+                rentTypeResponseCall.enqueue(new Callback<RentTypeResponse>() {
+                    @Override
+                    public void onResponse(Call<RentTypeResponse> call, Response<RentTypeResponse> response) {
+                        if (response.isSuccessful()){
+                            rentTypes = response.body().getRentTypesList();
+                            setRentTypeSpinner();
+                            Log.d("rentType", String.valueOf(rentTypes.size()));
+                        }else {
+                            Log.d("onResponse: ", "crap");
+                            Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<RentTypeResponse> call, Throwable t) {
+
+                    }
+                });
+            }
+        }).start();
+
+        new Thread(new Runnable() {
             @Override
-            public void onFailure(Call<RentTypeResponse> call, Throwable t) {
+            public void run() {
+                Call<AreaResponse> areaResponseCall = apiService.getAreas();
+                areaResponseCall.enqueue(new Callback<AreaResponse>() {
+                    @Override
+                    public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
+                        if (response.isSuccessful()){
+                            areas = response.body().getAreaList();
+                            Log.d("area", String.valueOf(areas.size()));
+                            setAreaSpinner();
+                        }else {
+                            Log.d("onResponse: ", "crap");
+                            Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<AreaResponse> call, Throwable t) {
+
+                    }
+                });
             }
-        });
+        }).start();
 
-        Call<AreaResponse> areaResponseCall = apiService.getAreas();
-        areaResponseCall.enqueue(new Callback<AreaResponse>() {
+        new Thread(new Runnable() {
             @Override
-            public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
-                if (response.isSuccessful()){
-                    areas = response.body().getAreaList();
-                    Log.d("area", String.valueOf(areas.size()));
-                    setAreaSpinner();
-                }else {
-                    Log.d("onResponse: ", "crap");
-                    Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
-                }
+            public void run() {
+                Call<RentalAdResponse> rentalAdResponseCall = apiService.getRentalAds();
+                rentalAdResponseCall.enqueue(new Callback<RentalAdResponse>() {
+                    @Override
+                    public void onResponse(Call<RentalAdResponse> call, Response<RentalAdResponse> response) {
+                        if (response.isSuccessful()) {
+                            rentalAds = response.body().getRentalAds();
+                            Log.d("rents", String.valueOf(rentalAds.size()));
+                            setRentalAdsView();
+                            progress.dismiss();
+                        } else {
+                            Log.d("onResponse: ", "crap");
+                            Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RentalAdResponse> call, Throwable t) {
+
+                    }
+                });
             }
-
-            @Override
-            public void onFailure(Call<AreaResponse> call, Throwable t) {
-
-            }
-        });
-
-        Call<RentalAdResponse> rentalAdResponseCall = apiService.getRentalAds();
-        rentalAdResponseCall.enqueue(new Callback<RentalAdResponse>() {
-            @Override
-            public void onResponse(Call<RentalAdResponse> call, Response<RentalAdResponse> response) {
-                if (response.isSuccessful()) {
-                    rentalAds = response.body().getRentalAds();
-                    Log.d("rents", String.valueOf(rentalAds.size()));
-                    setRentalAdsView();
-                    progress.dismiss();
-                } else {
-                    Log.d("onResponse: ", "crap");
-                    Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RentalAdResponse> call, Throwable t) {
-
-            }
-        });
+        }).start();
 
     }
 

@@ -108,7 +108,7 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
         final int position = intent.getIntExtra("rent_id", 0);
         final String treviews = intent.getStringExtra("rent_rev");
         final double rating = intent.getDoubleExtra("rent_ratings", 0);
-        Call<RentResponse> rentCall = apiService.getSingleRentalAd(position);
+        final Call<RentResponse> rentCall = apiService.getSingleRentalAd(position);
 
 //        Log.d("rent_id", String.valueOf(position));
 //        Log.d("rent_id", String.valueOf(treviews));
@@ -141,32 +141,44 @@ public class RentDetailView extends AppCompatActivity implements Drawer.OnDrawer
 
         btn_addtoWishList = (ImageButton) findViewById(R.id.btn_addtowishlist);
 
-        rentCall.enqueue(new Callback<RentResponse>() {
+        new Thread(new Runnable() {
             @Override
-            public void onResponse(Call<RentResponse> call, Response<RentResponse> response) {
-                List<Rent> rents = response.body().getRents();
+            public void run() {
+                rentCall.enqueue(new Callback<RentResponse>() {
+                    @Override
+                    public void onResponse(Call<RentResponse> call, Response<RentResponse> response) {
+                        List<Rent> rents = response.body().getRents();
 
-                rent = rents.get(0);
-                banner.setText(rent.getBanner());
-                beds.setText("Bed Room's: " + String.valueOf(rent.getBeds()));
-                baths.setText("Bed Room's: " + String.valueOf(rent.getBaths()));
-                size.setText("Size: " + String.valueOf(rent.getSize()) + "SQFT");
-                floordetails.setText("Details: " + rent.getFloordetails());
-                lift_parking.setText("lift: " + rent.isLift() + " Parking: " + rent.isParking());
-                address.setText("Address: " + rent.getAddress());
-                rentprice.setText("Rent: " + String.valueOf(rent.getRentprice()) + "BDT/Month");
-                rentdetails.setText("Others: " + rent.getRentdetails());
-                available.setText("Available From: " + rent.getAvailable());
-                posted_at.setText("Ad Posted @" + rent.getCreated_at());
-                reviews.setText("Total Reviews: " + treviews);
-                ratings.setRating((float) rating);
+                        rent = rents.get(0);
+                        banner.setText(rent.getBanner());
+                        beds.setText("Bed Room's: " + String.valueOf(rent.getBeds()));
+                        baths.setText("Bath Room's: " + String.valueOf(rent.getBaths()));
+                        size.setText("Size: " + String.valueOf(rent.getSize()) + " Sqft.");
+                        floordetails.setText("Details: " + rent.getFloordetails());
+                        lift_parking.setText("lift: " + rent.isLift() + " Parking: " + rent.isParking());
+                        address.setText("Address: " + rent.getAddress());
+                        rentprice.setText("Rent: " + String.valueOf(rent.getRentprice()) + "BDT/Month");
+                        rentdetails.setText("Others: " + rent.getRentdetails());
+                        available.setText("Available From: " + rent.getAvailable());
+                        posted_at.setText("Ad Posted @" + rent.getCreated_at());
+                        reviews.setText("Total Reviews: " + treviews);
+                        ratings.setRating((float) rating);
+                    }
+
+                    @Override
+                    public void onFailure(Call<RentResponse> call, Throwable t) {
+
+                    }
+                });
             }
+        }).start();
 
+        new Thread(new Runnable() {
             @Override
-            public void onFailure(Call<RentResponse> call, Throwable t) {
-
+            public void run() {
+                showReviews(position);
             }
-        });
+        }).start();
 
         img_one.setOnClickListener(new View.OnClickListener() {
             @Override

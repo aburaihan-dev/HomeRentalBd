@@ -46,8 +46,8 @@ public class RentalAdsAdapter extends RecyclerView.Adapter<RentalAdsAdapter.Rent
         holder.banner.setText(rentalAdsList.get(position).getBanner());
         holder.area.setText(rentalAdsList.get(position).getArea());
         holder.type.setText(rentalAdsList.get(position).getType());
-        holder.beds.setText("Beds: " + String.valueOf(rentalAdsList.get(position).getBeds()));
-        holder.size.setText("Size: " + String.valueOf(rentalAdsList.get(position).getSize()));
+//        holder.beds.setText("Beds: " + String.valueOf(rentalAdsList.get(position).getBeds()));
+//        holder.size.setText("Size: " + String.valueOf(rentalAdsList.get(position).getSize()));
         holder.rentprice.setText("Cost/Mo: " + String.valueOf(rentalAdsList.get(position).getRentprice()) + "BDT");
         holder.reviews.setText("Reviews: " + String.valueOf(rentalAdsList.get(position).getReviews()));
         holder.available.setText("Available From: " + rentalAdsList.get(position).getAvailable());
@@ -90,8 +90,8 @@ public class RentalAdsAdapter extends RecyclerView.Adapter<RentalAdsAdapter.Rent
             banner = (TextView) itemView.findViewById(R.id.txt_banner);
             area = (TextView) itemView.findViewById(R.id.txt_area);
             type = (TextView) itemView.findViewById(R.id.txt_type);
-            beds = (TextView) itemView.findViewById(R.id.txt_bedrooms);
-            size = (TextView) itemView.findViewById(R.id.txt_aptsize);
+//            beds = (TextView) itemView.findViewById(R.id.txt_bedrooms);
+//            size = (TextView) itemView.findViewById(R.id.txt_aptsize);
             rentprice = (TextView) itemView.findViewById(R.id.txt_price);
             reviews = (TextView) itemView.findViewById(R.id.txt_views);
             available = (TextView) itemView.findViewById(R.id.txt_avail);

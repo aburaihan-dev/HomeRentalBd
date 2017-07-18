@@ -21,11 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".activities.DefaultActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.SignIn_activity"
@@ -43,6 +38,19 @@
             android:name=".activities.CreateRentalAd"
             android:screenOrientation="portrait" />
         <activity android:name=".activities.CreateRentalQuery" />
+        <activity
+            android:name=".activities.ViewRentInMap"
+            android:label="@string/title_activity_view_rent_in_map" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -54,10 +62,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".activities.ViewRentInMap"
-            android:label="@string/title_activity_view_rent_in_map"/>
     </application>
 
 </manifest>

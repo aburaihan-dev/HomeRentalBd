@@ -5,4 +5,7 @@
     <string name="firebaseStorageUrl">df</string>
     <string name="post_button">POST</string>
     <string name="title_activity_view_rent_in_map">Map</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

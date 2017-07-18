@@ -1,5 +1,6 @@
 package io.github.arsrabon.m.homerentalbd.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -57,6 +58,7 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
     Spinner rentType;
     Spinner areaList;
     RecyclerView rentalsRecyclerView;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +79,20 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
         // initialize ApiInterface for use
         apiService = ApiClient.getClient().create(ApiInterface.class);
 
+        progressTrackerAnimate();
+
         Call<RentTypeResponse> rentTypeResponseCall = apiService.getRentTypes();
         rentTypeResponseCall.enqueue(new Callback<RentTypeResponse>() {
             @Override
             public void onResponse(Call<RentTypeResponse> call, Response<RentTypeResponse> response) {
-                rentTypes = response.body().getRentTypesList();
-                setRentTypeSpinner();
-                Log.d("rentType", String.valueOf(rentTypes.size()));
+                if (response.isSuccessful()){
+                    rentTypes = response.body().getRentTypesList();
+                    setRentTypeSpinner();
+                    Log.d("rentType", String.valueOf(rentTypes.size()));
+                }else {
+                    Log.d("onResponse: ", "crap");
+                    Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -96,9 +105,14 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
         areaResponseCall.enqueue(new Callback<AreaResponse>() {
             @Override
             public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
-                areas = response.body().getAreaList();
-                Log.d("area", String.valueOf(areas.size()));
-                setAreaSpinner();
+                if (response.isSuccessful()){
+                    areas = response.body().getAreaList();
+                    Log.d("area", String.valueOf(areas.size()));
+                    setAreaSpinner();
+                }else {
+                    Log.d("onResponse: ", "crap");
+                    Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -115,8 +129,10 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
                     rentalAds = response.body().getRentalAds();
                     Log.d("rents", String.valueOf(rentalAds.size()));
                     setRentalAdsView();
+                    progress.dismiss();
                 } else {
                     Log.d("onResponse: ", "crap");
+                    Toast.makeText(DefaultActivity.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -126,6 +142,14 @@ public class DefaultActivity extends AppCompatActivity implements Drawer.OnDrawe
             }
         });
 
+    }
+
+    public void progressTrackerAnimate(){
+        progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
     }
 
     public void setRentalAdsView() {

@@ -1,6 +1,9 @@
 # HomeRentalBd
-HomeRentalBd is Smartphone Application.
-This repository is for homerentalbd Android Application.
+This is a rent management application for not only to help people for searching rental apartment but also the apartment/home owner to rent their home/apartment.
+## This version will be declared obsolete in future and no development work will be done.
+
+# HomeRentalBd V:2.0 is in the works.
+## This application has been reimagined and new cool features are added for the Users.
 
 ### Type: Commercial , Social Platform.
 #### Features: <br>
